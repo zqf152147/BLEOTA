@@ -1,6 +1,5 @@
 package com.example.bleota;
 
-<<<<<<< HEAD
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -46,6 +45,7 @@ public class ota extends AppCompatActivity {
     private UUID write_UUID_chara; // 写的特征编号
     private BluetoothGatt mBluetoothGatt; // 声明一个蓝牙GATT客户端对象
     private BluetoothDevice mRemoteDevice; // 声明一个蓝牙设备对象
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,7 @@ public class ota extends AppCompatActivity {
         initView(); // 初始化视图
         initBluetooth(); // 初始化蓝牙适配器
     }
+
     @SuppressLint("SetTextI18n")
     private void initBluetooth() {
         BluetoothAdapter mBluetoothAdapter; // 声明一个蓝牙适配器对象
@@ -62,16 +63,17 @@ public class ota extends AppCompatActivity {
         String address = getIntent().getStringExtra("address");
         // 根据设备地址获得远端的蓝牙设备对象
         mRemoteDevice = mBluetoothAdapter.getRemoteDevice(address);
-        tv_name.setText("设备名称："+mRemoteDevice.getName());
-        tv_address.setText("设备MAC："+mRemoteDevice.getAddress());
+        tv_name.setText("设备名称：" + mRemoteDevice.getName());
+        tv_address.setText("设备MAC：" + mRemoteDevice.getAddress());
         tv_status.setText("连接状态：未连接");
     }
+
     private void initView() {
         tv_name = findViewById(R.id.tv_name);
         tv_address = findViewById(R.id.tv_address);
         tv_status = findViewById(R.id.tv_status);
-        btn_file=findViewById(R.id.btn_file);
-        btn_send=findViewById(R.id.btn_send);
+        btn_file = findViewById(R.id.btn_file);
+        btn_send = findViewById(R.id.btn_send);
         btn_connect = findViewById(R.id.btn_connect);
         btn_connect.setOnClickListener(v -> {
             // 连接GATT服务器
@@ -87,16 +89,17 @@ public class ota extends AppCompatActivity {
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             //startActivity(intent);
-            startActivityForResult(intent,1240);
+            startActivityForResult(intent, 1240);
         });
         btn_send.setEnabled(false);
         btn_file.setEnabled(false);
     }
+
     @Override
-    protected  void onActivityResult(int requestCode,int resultCode,Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        tv_file = (TextView)findViewById(R.id.tv_file);
+        tv_file = (TextView) findViewById(R.id.tv_file);
         if (resultCode == Activity.RESULT_OK && requestCode == 1240) {
             Uri uri = data.getData();
             Cursor cursor = getContentResolver()
@@ -125,18 +128,18 @@ public class ota extends AppCompatActivity {
                     }
                     Log.i(TAG, "Size: " + size);
 
-                    tv_file.setText("File Name:" + displayName +'\n' +"Size: " +  size + "Byte");
+                    tv_file.setText("File Name:" + displayName + '\n' + "Size: " + size + "Byte");
                 }
             } finally {
                 cursor.close();
             }
 
-            try{
+            try {
                 file = getContentResolver().openFileDescriptor(uri, "r");
 
                 fis = new FileInputStream(file.getFileDescriptor());
                 file_length = fis.available();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             btn_send.setEnabled(true);
@@ -147,14 +150,16 @@ public class ota extends AppCompatActivity {
     private void sendCommand(int command) {
         new Thread(() -> writeCommand((byte) command)).start();
     }
+
     private void writeCommand(byte command) {
         // 拿到写的特征值
         BluetoothGattCharacteristic chara = mBluetoothGatt.getService(write_UUID_service)
                 .getCharacteristic(write_UUID_chara);
-        Log.d(TAG, "writeCharacteristic "+command);
+        Log.d(TAG, "writeCharacteristic " + command);
         chara.setValue(new byte[]{command}); // 设置写特征值
         mBluetoothGatt.writeCharacteristic(chara); // 往GATT服务器写入特征值
     }
+
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         // BLE连接的状态发生变化时回调
         @Override
@@ -173,13 +178,14 @@ public class ota extends AppCompatActivity {
                 mBluetoothGatt.close(); // 关闭GATT客户端
             }
         }
+
         @Override
         public void onServicesDiscovered(final BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
-            Log.d(TAG, "onServicesDiscovered status"+status);
+            Log.d(TAG, "onServicesDiscovered status" + status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 // 获取GATT服务器提供的服务列表
-                List<BluetoothGattService> gattServiceList= mBluetoothGatt.getServices();
+                List<BluetoothGattService> gattServiceList = mBluetoothGatt.getServices();
                 for (BluetoothGattService gattService : gattServiceList) {
                     List<BluetoothGattCharacteristic> charaList = gattService.getCharacteristics();
                     for (BluetoothGattCharacteristic chara : charaList) {
@@ -204,8 +210,4 @@ public class ota extends AppCompatActivity {
             mBluetoothGatt.disconnect(); // 断开GATT连接
         }
     }
-=======
-public class ota {
-
->>>>>>> 2c80663a2e953efa963967140084c20a9f3e8b7e
 }
