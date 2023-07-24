@@ -1,5 +1,6 @@
 package com.example.bleota;
 
+<<<<<<< HEAD
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -203,4 +204,8 @@ public class ota extends AppCompatActivity {
             mBluetoothGatt.disconnect(); // 断开GATT连接
         }
     }
+=======
+public class ota {
+
+>>>>>>> 2c80663a2e953efa963967140084c20a9f3e8b7e
 }

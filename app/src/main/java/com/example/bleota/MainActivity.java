@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private static final String TAG = "MainActivity";
     private CheckBox ck_bluetooth; // 声明一个复选框对象
     private TextView tv_discovery; // 声明一个文本视图对象
+<<<<<<< HEAD
+=======
+//    private ListView lv_bluetooth; // 声明一个用于展示蓝牙设备的列表视图对象
+>>>>>>> 2c80663a2e953efa963967140084c20a9f3e8b7e
     private BlueListAdapter mListAdapter; // 声明一个蓝牙设备的列表适配器对象
 
     private final Map<String, BlueDevice>  mDeviceMap = new HashMap<>(); // 蓝牙设备映射
@@ -48,21 +52,36 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         setContentView(R.layout.main);
+=======
+        setContentView(R.layout.activity_scan_car);
+>>>>>>> 2c80663a2e953efa963967140084c20a9f3e8b7e
         initView(); // 初始化视图
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             // Android12之后使用蓝牙需要蓝牙连接权限
             if (PermissionUtil.checkPermission(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.BLUETOOTH_SCAN,
                     Manifest.permission.BLUETOOTH_CONNECT}, 1)) {
+<<<<<<< HEAD
                 //startActivity(new Intent(this, ota.class));
+=======
+                startActivity(new Intent(this, ota.class));
+>>>>>>> 2c80663a2e953efa963967140084c20a9f3e8b7e
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Android6.0之后使用蓝牙需要定位权限
             if (PermissionUtil.checkPermission(this, Manifest.permission.ACCESS_FINE_LOCATION, 1)) {
+<<<<<<< HEAD
             }
         } else {
 
+=======
+                //startActivity(new Intent(this, ScanCarActivity.class));
+            }
+        } else {
+            startActivity(new Intent(this, ota.class));
+>>>>>>> 2c80663a2e953efa963967140084c20a9f3e8b7e
         }
         initBluetooth();
         if (BluetoothUtil.getBlueToothStatus()) { // 已经打开蓝牙
