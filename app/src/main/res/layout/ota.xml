@@ -18,16 +18,16 @@
         android:layout_width="match_parent"
         android:layout_height="48dp" />
 
+    <TextView
+        android:id="@+id/tv_file"
+        android:layout_width="match_parent"
+        android:layout_height="44dp" />
+
     <Button
         android:id="@+id/btn_connect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="连接" />
-
-    <TextView
-        android:id="@+id/tv_file"
-        android:layout_width="match_parent"
-        android:layout_height="44dp" />
 
     <Button
         android:id="@+id/btn_file"

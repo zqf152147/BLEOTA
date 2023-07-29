@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 @SuppressLint("MissingPermission")
-public class ota extends AppCompatActivity {
+public class ota extends AppCompatActivity{
     private static final String TAG = "OTA";
     private TextView tv_name; // 声明一个文本视图对象
     private TextView tv_address; // 声明一个文本视图对象
@@ -98,42 +98,30 @@ public class ota extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         tv_file = (TextView) findViewById(R.id.tv_file);
         if (resultCode == Activity.RESULT_OK && requestCode == 1240) {
             Uri uri = data.getData();
             Cursor cursor = getContentResolver()
                     .query(uri, null, null, null, null, null);
-
             try {
-                // moveToFirst() returns false if the cursor has 0 rows. Very handy for
-                // "if there's anything to look at, look at it" conditionals.
                 if (cursor != null && cursor.moveToFirst()) {
-
-                    // Note it's called "Display Name". This is
-                    // provider-specific, and might not necessarily be the file name.
                     @SuppressLint("Range") String displayName = cursor.getString(
                             cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-
                     Log.i(TAG, "Display Name: " + displayName);
-
                     int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
 
                     String size = null;
                     if (!cursor.isNull(sizeIndex)) {
-
                         size = cursor.getString(sizeIndex);
                     } else {
                         size = "Unknown";
                     }
                     Log.i(TAG, "Size: " + size);
-
-                    tv_file.setText("File Name:" + displayName + '\n' + "Size: " + size + "Byte");
+                    tv_file.setText("烧录文件:" + displayName + '\n' + "文件大小: " + size + "字节");
                 }
             } finally {
                 cursor.close();
             }
-
             try {
                 file = getContentResolver().openFileDescriptor(uri, "r");
 
@@ -146,7 +134,6 @@ public class ota extends AppCompatActivity {
         }
     }
 
-    // 向智能小车发送指令
     private void sendCommand(int command) {
         new Thread(() -> writeCommand((byte) command)).start();
     }
@@ -170,12 +157,14 @@ public class ota extends AppCompatActivity {
                 gatt.discoverServices(); // 开始查找GATT服务器提供的服务
                 runOnUiThread(() -> {
                     tv_status.setText("已连接");
-                    btn_connect.setVisibility(View.GONE);
+//                    btn_connect.setEnabled(false);
                     btn_file.setEnabled(true);
                 });
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) { // 连接断开
+                tv_status.setText("蓝牙断开");
                 btn_send.setEnabled(false);
-                mBluetoothGatt.close(); // 关闭GATT客户端
+                btn_file.setEnabled(false);
+//                mBluetoothGatt.close(); // 关闭GATT客户端
             }
         }
 
